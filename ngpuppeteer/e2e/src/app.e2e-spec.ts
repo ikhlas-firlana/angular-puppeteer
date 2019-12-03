@@ -1,23 +1,15 @@
-import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import * as puppeteer from 'puppeteer';
 
 describe('workspace-project App', () => {
-  let page: AppPage;
+  it('Test Puppeteer screenshot', async () => {
+    const browser = await puppeteer.launch({
+      devtools: true,
+      slowMo: 50 // slow down by 50ms
+    });
+    const page = await browser.newPage();
+    await page.goto('http://localhost:4200');
+    await page.screenshot({ path: 'tmp/example.png' });
 
-  beforeEach(() => {
-    page = new AppPage();
-  });
-
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to ngpuppeteer!');
-  });
-
-  afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    } as logging.Entry));
+    await browser.close();
   });
 });
